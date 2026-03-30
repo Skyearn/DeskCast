@@ -1,0 +1,35 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgN2" x1="116" y1="100" x2="902" y2="924" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F5FCFF"/>
+      <stop offset="0.42" stop-color="#DAF6FF"/>
+      <stop offset="1" stop-color="#B9EAFF"/>
+    </linearGradient>
+    <radialGradient id="glowN2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(724 214) rotate(128) scale(432)">
+      <stop stop-color="#FFFFFF" stop-opacity="0.84"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="deskN2" x1="230" y1="690" x2="792" y2="794" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2E7285"/>
+      <stop offset="1" stop-color="#155E75"/>
+    </linearGradient>
+    <linearGradient id="docN2" x1="268" y1="282" x2="532" y2="608" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#EEF9FF"/>
+    </linearGradient>
+  </defs>
+  <rect x="64" y="64" width="896" height="896" rx="214" fill="url(#bgN2)"/>
+  <rect x="64" y="64" width="896" height="896" rx="214" fill="url(#glowN2)"/>
+  <rect x="214" y="706" width="596" height="84" rx="42" fill="url(#deskN2)"/>
+  <rect x="252" y="688" width="520" height="30" rx="15" fill="#C6FAFF" fill-opacity="0.34"/>
+  <rect x="250" y="292" width="236" height="300" rx="70" fill="url(#docN2)"/>
+  <rect x="224" y="344" width="194" height="248" rx="58" fill="#FFFFFF" fill-opacity="0.44"/>
+  <path d="M396 292V368C396 391.196 414.804 410 438 410H486" fill="#D9F7FF"/>
+  <path d="M396 292V368C396 391.196 414.804 410 438 410H486" stroke="#44B7D1" stroke-width="18" stroke-linejoin="round"/>
+  <rect x="314" y="436" width="112" height="24" rx="12" fill="#1AA7C8"/>
+  <rect x="314" y="490" width="146" height="24" rx="12" fill="#1AA7C8"/>
+  <path d="M438 430L768 364V690L438 624V430Z" fill="#FFFFFF" fill-opacity="0.34"/>
+  <path d="M438 430L768 364V690L438 624V430Z" stroke="#8AE6F4" stroke-width="18" stroke-linejoin="round"/>
+  <path d="M512 706V632" stroke="#155E75" stroke-width="28" stroke-linecap="round"/>
+  <ellipse cx="512" cy="620" rx="42" ry="24" fill="#155E75"/>
+</svg>

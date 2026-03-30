@@ -1,0 +1,33 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgN4" x1="132" y1="98" x2="894" y2="926" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FAFAFC"/>
+      <stop offset="0.5" stop-color="#E7ECF4"/>
+      <stop offset="1" stop-color="#CCD6E4"/>
+    </linearGradient>
+    <radialGradient id="haloN4" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(736 210) rotate(128) scale(428)">
+      <stop stop-color="#FFFFFF" stop-opacity="0.84"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="deskN4" x1="230" y1="688" x2="794" y2="794" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#475569"/>
+      <stop offset="1" stop-color="#1E293B"/>
+    </linearGradient>
+    <linearGradient id="beamN4" x1="430" y1="410" x2="772" y2="680" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.88"/>
+      <stop offset="1" stop-color="#94A3B8" stop-opacity="0.10"/>
+    </linearGradient>
+  </defs>
+  <rect x="64" y="64" width="896" height="896" rx="214" fill="url(#bgN4)"/>
+  <rect x="64" y="64" width="896" height="896" rx="214" fill="url(#haloN4)"/>
+  <rect x="216" y="704" width="592" height="84" rx="42" fill="url(#deskN4)"/>
+  <rect x="254" y="686" width="516" height="30" rx="15" fill="#E2E8F0" fill-opacity="0.30"/>
+  <path d="M420 412L772 340V688L420 622V412Z" fill="url(#beamN4)"/>
+  <rect x="246" y="280" width="246" height="308" rx="72" fill="#FFFFFF"/>
+  <path d="M392 280V358C392 381.196 410.804 400 434 400H492" fill="#E2E8F0"/>
+  <path d="M392 280V358C392 381.196 410.804 400 434 400H492" stroke="#94A3B8" stroke-width="18" stroke-linejoin="round"/>
+  <rect x="312" y="426" width="122" height="24" rx="12" fill="#64748B"/>
+  <rect x="312" y="480" width="156" height="24" rx="12" fill="#64748B"/>
+  <path d="M512 704V626" stroke="#1E293B" stroke-width="28" stroke-linecap="round"/>
+  <ellipse cx="512" cy="614" rx="44" ry="24" fill="#1E293B"/>
+</svg>

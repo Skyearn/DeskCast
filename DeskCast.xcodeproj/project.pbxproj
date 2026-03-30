@@ -1,0 +1,261 @@
+// !$*UTF8*$!
+{
+	objectVersion = 56;
+	classes = {
+	};
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A1B2C3D41E00000100000001 /* DeskCastApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D41E00000200000001 /* DeskCastApp.swift */; };
+		A1B2C3D41E00000100000002 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D41E00000200000002 /* AppState.swift */; };
+		A1B2C3D41E00000100000003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D41E00000200000003 /* ContentView.swift */; };
+		A1B2C3D41E00000100000004 /* DocumentTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D41E00000200000004 /* DocumentTypes.swift */; };
+		A1B2C3D41E00000100000005 /* ProjectionDocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D41E00000200000005 /* ProjectionDocumentView.swift */; };
+		A1B2C3D41E00000100000006 /* DesktopProjectionWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D41E00000200000006 /* DesktopProjectionWindowController.swift */; };
+		A1B2C3D41E00000100000007 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D41E00000200000007 /* Assets.xcassets */; };
+		A1B2C3D41E00000100000008 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D41E0000020000000A /* InfoPlist.strings */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A1B2C3D41E00000200000000 /* DeskCast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeskCast.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1B2C3D41E00000200000001 /* DeskCastApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeskCastApp.swift; sourceTree = "<group>"; };
+		A1B2C3D41E00000200000002 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		A1B2C3D41E00000200000003 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A1B2C3D41E00000200000004 /* DocumentTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentTypes.swift; sourceTree = "<group>"; };
+		A1B2C3D41E00000200000005 /* ProjectionDocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectionDocumentView.swift; sourceTree = "<group>"; };
+		A1B2C3D41E00000200000006 /* DesktopProjectionWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesktopProjectionWindowController.swift; sourceTree = "<group>"; };
+		A1B2C3D41E00000200000007 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A1B2C3D41E00000200000008 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A1B2C3D41E00000200000009 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A1B2C3D41E00000300000000 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A1B2C3D41E00000400000000 = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D41E00000400000001 /* DeskCast */,
+				A1B2C3D41E00000400000002 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A1B2C3D41E00000400000001 /* DeskCast */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D41E00000200000001 /* DeskCastApp.swift */,
+				A1B2C3D41E00000200000002 /* AppState.swift */,
+				A1B2C3D41E00000200000003 /* ContentView.swift */,
+				A1B2C3D41E00000200000004 /* DocumentTypes.swift */,
+				A1B2C3D41E00000200000005 /* ProjectionDocumentView.swift */,
+				A1B2C3D41E00000200000006 /* DesktopProjectionWindowController.swift */,
+				A1B2C3D41E0000020000000A /* InfoPlist.strings */,
+				A1B2C3D41E00000200000007 /* Assets.xcassets */,
+			);
+			path = DeskCast;
+			sourceTree = "<group>";
+		};
+		A1B2C3D41E00000400000002 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D41E00000200000000 /* DeskCast.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXVariantGroup section */
+		A1B2C3D41E0000020000000A /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A1B2C3D41E00000200000008 /* en */,
+				A1B2C3D41E00000200000009 /* zh-Hans */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin PBXNativeTarget section */
+		A1B2C3D41E00000500000000 /* DeskCast */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1B2C3D41E00000900000001 /* Build configuration list for PBXNativeTarget "DeskCast" */;
+			buildPhases = (
+				A1B2C3D41E00000600000000 /* Sources */,
+				A1B2C3D41E00000300000000 /* Frameworks */,
+				A1B2C3D41E00000700000000 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DeskCast;
+			productName = DeskCast;
+			productReference = A1B2C3D41E00000200000000 /* DeskCast.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A1B2C3D41E00000800000000 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2640;
+				LastUpgradeCheck = 2640;
+				TargetAttributes = {
+					A1B2C3D41E00000500000000 = {
+						CreatedOnToolsVersion = 26.4;
+					};
+				};
+			};
+			buildConfigurationList = A1B2C3D41E00000900000000 /* Build configuration list for PBXProject "DeskCast" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				"zh-Hans",
+			);
+			mainGroup = A1B2C3D41E00000400000000;
+			productRefGroup = A1B2C3D41E00000400000002 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A1B2C3D41E00000500000000 /* DeskCast */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A1B2C3D41E00000700000000 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B2C3D41E00000100000007 /* Assets.xcassets in Resources */,
+				A1B2C3D41E00000100000008 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A1B2C3D41E00000600000000 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B2C3D41E00000100000002 /* AppState.swift in Sources */,
+				A1B2C3D41E00000100000003 /* ContentView.swift in Sources */,
+				A1B2C3D41E00000100000006 /* DesktopProjectionWindowController.swift in Sources */,
+				A1B2C3D41E00000100000001 /* DeskCastApp.swift in Sources */,
+				A1B2C3D41E00000100000004 /* DocumentTypes.swift in Sources */,
+				A1B2C3D41E00000100000005 /* ProjectionDocumentView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A1B2C3D41E00000A00000000 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		A1B2C3D41E00000A00000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		A1B2C3D41E00000A00000002 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = DeskCast;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_LSUIElement = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.al.DeskCast;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		A1B2C3D41E00000A00000003 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = DeskCast;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_LSUIElement = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.al.DeskCast;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A1B2C3D41E00000900000000 /* Build configuration list for PBXProject "DeskCast" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1B2C3D41E00000A00000000 /* Debug */,
+				A1B2C3D41E00000A00000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1B2C3D41E00000900000001 /* Build configuration list for PBXNativeTarget "DeskCast" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1B2C3D41E00000A00000002 /* Debug */,
+				A1B2C3D41E00000A00000003 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A1B2C3D41E00000800000000 /* Project object */;
+}

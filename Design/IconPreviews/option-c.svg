@@ -1,0 +1,23 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgC" x1="150" y1="106" x2="884" y2="932" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111827"/>
+      <stop offset="0.58" stop-color="#334155"/>
+      <stop offset="1" stop-color="#0EA5E9"/>
+    </linearGradient>
+    <linearGradient id="beamC" x1="564" y1="354" x2="794" y2="648" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.88"/>
+      <stop offset="1" stop-color="#7DD3FC" stop-opacity="0.1"/>
+    </linearGradient>
+  </defs>
+  <rect x="64" y="64" width="896" height="896" rx="214" fill="url(#bgC)"/>
+  <path d="M562 354L794 274V676L562 596V354Z" fill="url(#beamC)"/>
+  <rect x="252" y="378" width="266" height="266" rx="74" fill="#F8FBFF"/>
+  <path d="M416 378V452C416 474.091 433.909 492 456 492H518" fill="#C7DDFE"/>
+  <path d="M416 378V452C416 474.091 433.909 492 456 492H518" stroke="#8FB8FF" stroke-width="18" stroke-linejoin="round"/>
+  <rect x="320" y="474" width="118" height="24" rx="12" fill="#9CC0FF"/>
+  <rect x="320" y="528" width="146" height="24" rx="12" fill="#9CC0FF"/>
+  <rect x="260" y="668" width="282" height="58" rx="29" fill="#0F2D54" fill-opacity="0.82"/>
+  <path d="M402 668V792" stroke="#EAF6FF" stroke-width="26" stroke-linecap="round"/>
+  <path d="M336 792H468" stroke="#EAF6FF" stroke-width="26" stroke-linecap="round"/>
+</svg>
