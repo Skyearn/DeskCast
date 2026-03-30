@@ -74,6 +74,19 @@ xcodebuild \
 3. 打包 `DeskCast.app`
 4. 上传为 GitHub Actions Artifact
 
+另外还包含一个发布工作流：
+
+- 文件位置：`.github/workflows/release.yml`
+- 触发方式：推送 `v*` 标签，或手动触发
+- 产物内容：自动创建 GitHub Release，并上传 zip 附件
+
+发布示例：
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
 ## 发布前建议
 
 - 确认应用名称、本地化文案和图标都已定稿
