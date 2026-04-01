@@ -135,7 +135,7 @@ struct ContentView: View {
                                     .font(.footnote.weight(.semibold))
                                     .lineLimit(1)
 
-                                Text(screenTitle(for: projection.screenID))
+                                Text(state.targetScreenTitle(for: projection))
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                                     .lineLimit(1)
@@ -168,9 +168,19 @@ struct ContentView: View {
                     Text(projection.fileName)
                         .font(.system(.headline, design: .rounded, weight: .bold))
 
-                    Text(state.screenSummary)
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
+                    Text(
+                        state.isFallbackActive(for: projection)
+                            ? "当前屏幕：临时 - \(state.effectiveScreenTitle(for: projection))"
+                            : state.screenSummary
+                    )
+                    .font(.footnote)
+                    .foregroundStyle(state.isFallbackActive(for: projection) ? .orange : .secondary)
+
+                    if state.isFallbackActive(for: projection) {
+                        Text("原屏幕：\(state.targetScreenTitle(for: projection))")
+                            .font(.footnote)
+                            .foregroundStyle(.orange)
+                    }
                 }
 
                 screenSection(for: projection)
@@ -193,7 +203,11 @@ struct ContentView: View {
                 .foregroundStyle(.secondary)
 
             Picker("投影到哪个屏幕", selection: Binding(
-                get: { projection.screenID },
+                get: {
+                    state.isFallbackActive(for: projection)
+                        ? state.effectiveScreen(for: projection).id
+                        : projection.screenID
+                },
                 set: { state.selectScreenForSelectedProjection($0) }
             )) {
                 ForEach(state.availableScreens) { screen in
@@ -340,18 +354,21 @@ struct ContentView: View {
     private func geometryBinding(_ keyPath: WritableKeyPath<ProjectionGeometry, Double>) -> Binding<Double> {
         Binding(
             get: {
-                selectedProjection?.geometry[keyPath: keyPath] ?? 0
+                guard let projection = selectedProjection else { return 0 }
+                return state.effectiveGeometry(for: projection)[keyPath: keyPath]
             },
             set: { newValue in
                 state.updateSelectedProjection { item in
-                    item.geometry[keyPath: keyPath] = newValue
+                    if state.isFallbackActive(for: item) {
+                        var geometry = state.effectiveGeometry(for: item)
+                        geometry[keyPath: keyPath] = newValue
+                        state.setFallbackGeometry(geometry, for: item.id)
+                    } else {
+                        item.geometry[keyPath: keyPath] = newValue
+                    }
                 }
             }
         )
-    }
-
-    private func screenTitle(for screenID: UInt32) -> String {
-        state.screen(for: screenID)?.title ?? state.defaultScreen.title
     }
 
     private func tickedSlider(

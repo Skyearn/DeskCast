@@ -1,8 +1,6 @@
 name: Build macOS App
 
 on:
-  push:
-  pull_request:
   workflow_dispatch:
 
 jobs:
@@ -41,4 +39,3 @@ jobs:
           name: DeskCast-macOS
           path: DeskCast-macOS.zip
           if-no-files-found: error
-

@@ -59,6 +59,7 @@ struct ProjectionItem: Identifiable, Codable, Equatable {
     var id: UUID
     var filePath: String
     var screenID: UInt32
+    var screenTitle: String
     var geometry: ProjectionGeometry
     var transparency: Double
     var contentScale: Double
@@ -68,6 +69,7 @@ struct ProjectionItem: Identifiable, Codable, Equatable {
         id: UUID = UUID(),
         fileURL: URL,
         screenID: UInt32,
+        screenTitle: String,
         geometry: ProjectionGeometry,
         transparency: Double = 0.25,
         contentScale: Double = 1.0,
@@ -76,6 +78,7 @@ struct ProjectionItem: Identifiable, Codable, Equatable {
         self.id = id
         self.filePath = fileURL.path
         self.screenID = screenID
+        self.screenTitle = screenTitle
         self.geometry = geometry
         self.transparency = transparency
         self.contentScale = contentScale
@@ -94,6 +97,7 @@ struct ProjectionItem: Identifiable, Codable, Equatable {
         case id
         case filePath
         case screenID
+        case screenTitle
         case geometry
         case transparency
         case contentScale
@@ -106,6 +110,7 @@ struct ProjectionItem: Identifiable, Codable, Equatable {
         id = try container.decode(UUID.self, forKey: .id)
         filePath = try container.decode(String.self, forKey: .filePath)
         screenID = try container.decode(UInt32.self, forKey: .screenID)
+        screenTitle = try container.decodeIfPresent(String.self, forKey: .screenTitle) ?? ""
         geometry = try container.decode(ProjectionGeometry.self, forKey: .geometry)
         contentScale = try container.decodeIfPresent(Double.self, forKey: .contentScale) ?? 1.0
         isVisible = try container.decodeIfPresent(Bool.self, forKey: .isVisible) ?? true
@@ -124,6 +129,7 @@ struct ProjectionItem: Identifiable, Codable, Equatable {
         try container.encode(id, forKey: .id)
         try container.encode(filePath, forKey: .filePath)
         try container.encode(screenID, forKey: .screenID)
+        try container.encode(screenTitle, forKey: .screenTitle)
         try container.encode(geometry, forKey: .geometry)
         try container.encode(transparency, forKey: .transparency)
         try container.encode(contentScale, forKey: .contentScale)
@@ -143,12 +149,19 @@ final class ProjectionState: ObservableObject {
     @Published var lastErrorMessage: String?
 
     private let persistenceKey = "DeskCast.persistedProjectionState"
+    private let screenTitleCacheKey = "DeskCast.knownScreenTitles"
     private var cancellables = Set<AnyCancellable>()
     private var isRestoringState = false
+    private var fallbackGeometries: [UUID: ProjectionGeometry] = [:]
+    private var knownScreenTitles: [UInt32: String] = [:]
+    private let placeholderScreenTitles: Set<String> = ["", "未知显示器", "已断开的显示器"]
 
     init() {
+        restoreKnownScreenTitles()
+        refreshKnownScreenTitles()
         restoreState()
         configurePersistence()
+        configureScreenMonitoring()
     }
 
     var selectedProjection: ProjectionItem? {
@@ -185,12 +198,22 @@ final class ProjectionState: ObservableObject {
         }
     }
 
+    static var primaryScreen: ProjectionScreen? {
+        guard let screen = NSScreen.screens.first else { return nil }
+        return ProjectionScreen(
+            id: screen.displayID,
+            name: screen.localizedName,
+            frame: screen.frame
+        )
+    }
+
     var availableScreens: [ProjectionScreen] {
         Self.screens
     }
 
     var defaultScreen: ProjectionScreen {
-        availableScreens.first
+        Self.primaryScreen
+            ?? availableScreens.first
             ?? ProjectionScreen(id: 0, name: "主屏幕", frame: CGRect(x: 0, y: 0, width: 1440, height: 900))
     }
 
@@ -200,7 +223,7 @@ final class ProjectionState: ObservableObject {
 
     var currentScreen: ProjectionScreen {
         guard let projection = selectedProjection else { return defaultScreen }
-        return screen(for: projection.screenID) ?? defaultScreen
+        return effectiveScreen(for: projection)
     }
 
     var currentScreenFrame: CGRect {
@@ -210,6 +233,44 @@ final class ProjectionState: ObservableObject {
     var screenSummary: String {
         let screen = currentScreen
         return "当前屏幕：\(screen.name) · \(Int(screen.frame.width)) × \(Int(screen.frame.height))"
+    }
+
+    func effectiveScreen(for projection: ProjectionItem) -> ProjectionScreen {
+        screen(for: projection.screenID) ?? defaultScreen
+    }
+
+    func isFallbackActive(for projection: ProjectionItem) -> Bool {
+        screen(for: projection.screenID) == nil
+    }
+
+    func effectiveGeometry(for projection: ProjectionItem) -> ProjectionGeometry {
+        if isFallbackActive(for: projection) {
+            return fallbackGeometries[projection.id] ?? projection.geometry.clamped(to: defaultScreen.frame)
+        }
+        return projection.geometry
+    }
+
+    func setFallbackGeometry(_ geometry: ProjectionGeometry, for id: UUID) {
+        fallbackGeometries[id] = geometry.clamped(to: defaultScreen.frame)
+    }
+
+    func targetScreenTitle(for projection: ProjectionItem) -> String {
+        if let screen = screen(for: projection.screenID) {
+            return screen.title
+        }
+        if !isPlaceholderScreenTitle(projection.screenTitle) {
+            return projection.screenTitle
+        }
+        return knownScreenTitles[projection.screenID] ?? "未知显示器"
+    }
+
+    func effectiveScreenTitle(for projection: ProjectionItem) -> String {
+        effectiveScreen(for: projection).title
+    }
+
+    func effectiveScreenPickerTitle(for projection: ProjectionItem) -> String {
+        let title = effectiveScreen(for: projection).title
+        return isFallbackActive(for: projection) ? "临时 - \(title)" : title
     }
 
     func presentOpenPanel() {
@@ -292,15 +353,28 @@ final class ProjectionState: ObservableObject {
 
     func centerSelectedProjection() {
         updateSelectedProjection { item in
-            let screen = screen(for: item.screenID) ?? defaultScreen
-            item.geometry = ProjectionGeometry.centered(in: screen.frame)
+            if isFallbackActive(for: item) {
+                fallbackGeometries[item.id] = ProjectionGeometry.centered(in: defaultScreen.frame)
+            } else {
+                let screen = screen(for: item.screenID) ?? defaultScreen
+                item.geometry = ProjectionGeometry.centered(in: screen.frame)
+            }
         }
     }
 
     func fillSelectedProjection() {
         updateSelectedProjection { item in
-            let screen = screen(for: item.screenID) ?? defaultScreen
-            item.geometry = ProjectionGeometry(x: 0, y: 0, width: screen.frame.width, height: screen.frame.height)
+            if isFallbackActive(for: item) {
+                fallbackGeometries[item.id] = ProjectionGeometry(
+                    x: 0,
+                    y: 0,
+                    width: defaultScreen.frame.width,
+                    height: defaultScreen.frame.height
+                )
+            } else {
+                let screen = screen(for: item.screenID) ?? defaultScreen
+                item.geometry = ProjectionGeometry(x: 0, y: 0, width: screen.frame.width, height: screen.frame.height)
+            }
         }
     }
 
@@ -308,14 +382,20 @@ final class ProjectionState: ObservableObject {
         updateSelectedProjection { item in
             item.screenID = displayID
             let screen = screen(for: displayID) ?? defaultScreen
+            item.screenTitle = screen.title
             item.geometry = item.geometry.clamped(to: screen.frame)
+            fallbackGeometries[item.id] = nil
         }
     }
 
     func normalizeSelectedProjectionGeometry() {
         updateSelectedProjection { item in
-            let screen = screen(for: item.screenID) ?? defaultScreen
-            item.geometry = item.geometry.clamped(to: screen.frame)
+            if isFallbackActive(for: item) {
+                fallbackGeometries[item.id] = effectiveGeometry(for: item).clamped(to: defaultScreen.frame)
+            } else {
+                let screen = screen(for: item.screenID) ?? defaultScreen
+                item.geometry = item.geometry.clamped(to: screen.frame)
+            }
             item.transparency = min(max(item.transparency, 0), 1.0)
             item.contentScale = min(max(item.contentScale, 0.25), 3.0)
         }
@@ -341,6 +421,7 @@ final class ProjectionState: ObservableObject {
         return ProjectionItem(
             fileURL: url,
             screenID: screen.id,
+            screenTitle: screen.title,
             geometry: geometry,
             transparency: selectedProjection?.transparency ?? 0.25,
             contentScale: selectedProjection?.contentScale ?? 1.0,
@@ -350,9 +431,13 @@ final class ProjectionState: ObservableObject {
 
     private func normalizedProjection(_ item: ProjectionItem) -> ProjectionItem {
         var normalized = item
-        let screen = screen(for: normalized.screenID) ?? defaultScreen
-        normalized.screenID = screen.id
-        normalized.geometry = normalized.geometry.clamped(to: screen.frame)
+        if let screen = screen(for: normalized.screenID) {
+            normalized.screenTitle = screen.title
+            knownScreenTitles[screen.id] = screen.title
+            normalized.geometry = normalized.geometry.clamped(to: screen.frame)
+        } else if isPlaceholderScreenTitle(normalized.screenTitle) {
+            normalized.screenTitle = knownScreenTitles[normalized.screenID] ?? "未知显示器"
+        }
         normalized.transparency = min(max(normalized.transparency, 0), 1.0)
         normalized.contentScale = min(max(normalized.contentScale, 0.25), 3.0)
         return normalized
@@ -388,6 +473,22 @@ final class ProjectionState: ObservableObject {
             .store(in: &cancellables)
     }
 
+    private func configureScreenMonitoring() {
+        NotificationCenter.default.publisher(for: NSApplication.didChangeScreenParametersNotification)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.handleScreenConfigurationChange()
+            }
+            .store(in: &cancellables)
+    }
+
+    private func handleScreenConfigurationChange() {
+        refreshKnownScreenTitles()
+        projections = projections.map(normalizedProjection)
+        let activeIDs = Set(projections.filter(isFallbackActive).map(\.id))
+        fallbackGeometries = fallbackGeometries.filter { activeIDs.contains($0.key) }
+    }
+
     private func persistStateIfNeeded() {
         guard !isRestoringState else { return }
 
@@ -398,6 +499,31 @@ final class ProjectionState: ObservableObject {
 
         guard let data = try? JSONEncoder().encode(state) else { return }
         UserDefaults.standard.set(data, forKey: persistenceKey)
+    }
+
+    private func isPlaceholderScreenTitle(_ title: String) -> Bool {
+        placeholderScreenTitles.contains(title.trimmingCharacters(in: .whitespacesAndNewlines))
+    }
+
+    private func refreshKnownScreenTitles() {
+        for screen in availableScreens {
+            knownScreenTitles[screen.id] = screen.title
+        }
+
+        let persisted = Dictionary(uniqueKeysWithValues: knownScreenTitles.map { (String($0.key), $0.value) })
+        UserDefaults.standard.set(persisted, forKey: screenTitleCacheKey)
+    }
+
+    private func restoreKnownScreenTitles() {
+        guard let cached = UserDefaults.standard.dictionary(forKey: screenTitleCacheKey) as? [String: String] else {
+            knownScreenTitles = [:]
+            return
+        }
+
+        knownScreenTitles = cached.reduce(into: [:]) { partialResult, element in
+            guard let key = UInt32(element.key) else { return }
+            partialResult[key] = element.value
+        }
     }
 }
 

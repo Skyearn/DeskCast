@@ -20,6 +20,14 @@ final class DesktopProjectionWindowController {
                 self?.syncWindows(with: items)
             }
             .store(in: &cancellables)
+
+        NotificationCenter.default.publisher(for: NSApplication.didChangeScreenParametersNotification)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.syncWindows(with: self.state.projections)
+            }
+            .store(in: &cancellables)
     }
 
     private func syncWindows(with items: [ProjectionItem]) {
@@ -66,8 +74,8 @@ final class DesktopProjectionWindowController {
     }
 
     private func frame(for item: ProjectionItem) -> CGRect {
-        let screen = state.screen(for: item.screenID) ?? state.defaultScreen
-        return item.geometry.rect(in: screen.frame)
+        let screen = state.effectiveScreen(for: item)
+        return state.effectiveGeometry(for: item).rect(in: screen.frame)
     }
 }
 
