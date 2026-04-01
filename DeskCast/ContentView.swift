@@ -43,26 +43,6 @@ struct ContentView: View {
         }
         .padding(14)
         .frame(width: 388)
-        .background(
-            ZStack {
-                VisualEffectMaterialView(material: .menu, blendingMode: .behindWindow)
-
-                LinearGradient(
-                    colors: [
-                        Color.white.opacity(0.14),
-                        Color.white.opacity(0.04),
-                        Color.black.opacity(0.06)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            }
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .strokeBorder(Color.white.opacity(0.18), lineWidth: 0.8)
-        )
     }
 
     private var header: some View {
