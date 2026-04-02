@@ -1,20 +1,14 @@
 ## 更新内容
 
-- 优化菜单栏投影面板和整体编辑体验。
-- 修复目标显示器断开时的多屏回退逻辑。
-- 投影在目标显示器断开后会临时回退到主屏，并在原显示器恢复连接后自动回到原屏。
-- 修复回退期间原屏幕名称显示不稳定的问题，更可靠地保留原显示器名称。
-- 修复回退期间修改位置和大小会影响原屏恢复布局的问题。
-- 补充 README 演示资源与自动构建、自动发布流程。
+- 修复 Mac 睡眠或唤醒后，多显示器投影位置会被错误改写的问题。
+- 目标显示器在唤醒阶段短暂不可用时，投影会临时回退显示，但不会再把原屏幕保存的位置永久改成回退后的值。
+- 优化屏幕配置变化时的状态同步逻辑，让显示器恢复后更稳定地回到原来的屏幕和布局。
 
 <details>
 <summary id="english">English release notes</summary>
 
-- Improved the menu bar projection panel and overall editing experience.
-- Fixed multi-display fallback behavior when a target screen disconnects.
-- Projections now temporarily fall back to the primary display and automatically restore when the original display reconnects.
-- Fixed screen-name persistence so the original display name is preserved more reliably during fallback.
-- Changes made while in fallback mode no longer overwrite the original screen layout.
-- Added README demo assets and release/build automation for publishing.
+- Fixed an issue where projection positions could be incorrectly rewritten after Mac sleep and wake in multi-display setups.
+- When the target display becomes briefly unavailable during wake, the projection may temporarily fall back, but the original saved position will no longer be permanently overwritten by the fallback value.
+- Improved screen-configuration synchronization so projections return more reliably to their original display and layout after the screen comes back.
 
 </details>

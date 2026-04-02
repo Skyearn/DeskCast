@@ -429,12 +429,14 @@ final class ProjectionState: ObservableObject {
         )
     }
 
-    private func normalizedProjection(_ item: ProjectionItem) -> ProjectionItem {
+    private func normalizedProjection(_ item: ProjectionItem, clampGeometry: Bool = true) -> ProjectionItem {
         var normalized = item
         if let screen = screen(for: normalized.screenID) {
             normalized.screenTitle = screen.title
             knownScreenTitles[screen.id] = screen.title
-            normalized.geometry = normalized.geometry.clamped(to: screen.frame)
+            if clampGeometry {
+                normalized.geometry = normalized.geometry.clamped(to: screen.frame)
+            }
         } else if isPlaceholderScreenTitle(normalized.screenTitle) {
             normalized.screenTitle = knownScreenTitles[normalized.screenID] ?? "未知显示器"
         }
@@ -456,7 +458,7 @@ final class ProjectionState: ObservableObject {
             return
         }
 
-        projections = saved.projections.map(normalizedProjection)
+        projections = saved.projections.map { normalizedProjection($0) }
         selectedProjectionID = saved.selectedProjectionID
 
         if selectedProjection == nil {
@@ -484,7 +486,7 @@ final class ProjectionState: ObservableObject {
 
     private func handleScreenConfigurationChange() {
         refreshKnownScreenTitles()
-        projections = projections.map(normalizedProjection)
+        projections = projections.map { normalizedProjection($0, clampGeometry: false) }
         let activeIDs = Set(projections.filter(isFallbackActive).map(\.id))
         fallbackGeometries = fallbackGeometries.filter { activeIDs.contains($0.key) }
     }
