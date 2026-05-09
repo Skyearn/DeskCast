@@ -75,7 +75,36 @@ final class DesktopProjectionWindowController {
 
     private func frame(for item: ProjectionItem) -> CGRect {
         let screen = state.effectiveScreen(for: item)
-        return state.effectiveGeometry(for: item).rect(in: screen.frame)
+        let rect = state.effectiveGeometry(for: item).rect(in: screen.frame)
+        return DocumentPreviewSizing.frameForPreviewing(url: item.fileURL, in: rect)
+    }
+}
+
+private enum DocumentPreviewSizing {
+    private static let spreadsheetExtensions: Set<String> = [
+        "csv",
+        "numbers",
+        "tsv",
+        "xls",
+        "xlsm",
+        "xlsx"
+    ]
+
+    static func frameForPreviewing(url: URL, in rect: CGRect) -> CGRect {
+        guard spreadsheetExtensions.contains(url.pathExtension.lowercased()),
+              ProjectionDocumentView.usesSpreadsheetQuickLookLayout(for: url)
+        else {
+            return rect
+        }
+
+        let aspectRatio = (try? XLSXHTMLRenderer.aspectRatio(url: url)) ?? 3.2
+        let fittedHeight = min(rect.height, ceil(rect.width / aspectRatio) + 18)
+        return CGRect(
+            x: rect.minX,
+            y: rect.maxY - fittedHeight,
+            width: rect.width,
+            height: fittedHeight
+        )
     }
 }
 

@@ -14,6 +14,7 @@
 		A1B2C3D41E00000100000006 /* DesktopProjectionWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D41E00000200000006 /* DesktopProjectionWindowController.swift */; };
 		A1B2C3D41E00000100000007 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D41E00000200000007 /* Assets.xcassets */; };
 		A1B2C3D41E00000100000008 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D41E0000020000000A /* InfoPlist.strings */; };
+		A1B2C3D41E00000100000009 /* SpreadsheetHTMLRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D41E0000020000000B /* SpreadsheetHTMLRenderer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		A1B2C3D41E00000200000007 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A1B2C3D41E00000200000008 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A1B2C3D41E00000200000009 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		A1B2C3D41E0000020000000B /* SpreadsheetHTMLRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpreadsheetHTMLRenderer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 				A1B2C3D41E00000200000003 /* ContentView.swift */,
 				A1B2C3D41E00000200000004 /* DocumentTypes.swift */,
 				A1B2C3D41E00000200000005 /* ProjectionDocumentView.swift */,
+				A1B2C3D41E0000020000000B /* SpreadsheetHTMLRenderer.swift */,
 				A1B2C3D41E00000200000006 /* DesktopProjectionWindowController.swift */,
 				A1B2C3D41E0000020000000A /* InfoPlist.strings */,
 				A1B2C3D41E00000200000007 /* Assets.xcassets */,
@@ -160,6 +163,7 @@
 				A1B2C3D41E00000100000001 /* DeskCastApp.swift in Sources */,
 				A1B2C3D41E00000100000004 /* DocumentTypes.swift in Sources */,
 				A1B2C3D41E00000100000005 /* ProjectionDocumentView.swift in Sources */,
+				A1B2C3D41E00000100000009 /* SpreadsheetHTMLRenderer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

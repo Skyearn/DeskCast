@@ -1,9 +1,14 @@
 import PDFKit
 import QuickLookUI
 import SwiftUI
+import WebKit
 
 struct ProjectionDocumentView: NSViewRepresentable {
     let url: URL?
+
+    nonisolated static func usesSpreadsheetQuickLookLayout(for url: URL) -> Bool {
+        SpreadsheetHTMLPreviewView.canPreview(url: url)
+    }
 
     func makeNSView(context: Context) -> DocumentPreviewHostView {
         DocumentPreviewHostView()
@@ -61,6 +66,14 @@ final class DocumentPreviewHostView: NSView {
             return pdfView
         }
 
+        if SpreadsheetHTMLPreviewView.canPreview(url: url) {
+            return SpreadsheetHTMLPreviewView(url: url) ?? makeQuickLookPreviewView(for: url)
+        }
+
+        return makeQuickLookPreviewView(for: url)
+    }
+
+    private func makeQuickLookPreviewView(for url: URL) -> NSView {
         guard let quickLookView = QLPreviewView(frame: .zero, style: .normal) else {
             let fallbackLabel = NSTextField(labelWithString: "系统无法为这个文件创建 Quick Look 预览。")
             fallbackLabel.alignment = .center
@@ -72,5 +85,26 @@ final class DocumentPreviewHostView: NSView {
         quickLookView.previewItem = url as NSURL
         quickLookView.autostarts = true
         return quickLookView
+    }
+}
+
+final class SpreadsheetHTMLPreviewView: WKWebView {
+    nonisolated static func canPreview(url: URL) -> Bool {
+        ["xlsx"].contains(url.pathExtension.lowercased())
+    }
+
+    init?(url: URL) {
+        guard let html = try? XLSXHTMLRenderer.render(url: url) else { return nil }
+
+        let configuration = WKWebViewConfiguration()
+        configuration.suppressesIncrementalRendering = true
+        super.init(frame: .zero, configuration: configuration)
+        setValue(false, forKey: "drawsBackground")
+        loadHTMLString(html, baseURL: url.deletingLastPathComponent())
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
