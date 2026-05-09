@@ -7,6 +7,7 @@ final class DesktopProjectionWindowController {
     private let state: ProjectionState
     private var cancellables = Set<AnyCancellable>()
     private var windows: [UUID: NSWindow] = [:]
+    private var measuredPreviewSizes: [URL: CGSize] = [:]
 
     init(state: ProjectionState) {
         self.state = state
@@ -26,6 +27,13 @@ final class DesktopProjectionWindowController {
             .sink { [weak self] _ in
                 guard let self else { return }
                 self.syncWindows(with: self.state.projections)
+            }
+            .store(in: &cancellables)
+
+        NotificationCenter.default.publisher(for: .quickLookPreferredSizeDidChange)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] notification in
+                self?.handleQuickLookPreferredSize(notification)
             }
             .store(in: &cancellables)
     }
@@ -76,7 +84,30 @@ final class DesktopProjectionWindowController {
     private func frame(for item: ProjectionItem) -> CGRect {
         let screen = state.effectiveScreen(for: item)
         let rect = state.effectiveGeometry(for: item).rect(in: screen.frame)
-        return DocumentPreviewSizing.frameForPreviewing(url: item.fileURL, in: rect)
+        return DocumentPreviewSizing.frameForPreviewing(
+            url: item.fileURL,
+            in: rect,
+            measuredSize: measuredPreviewSizes[item.fileURL]
+        )
+    }
+
+    private func handleQuickLookPreferredSize(_ notification: Notification) {
+        guard let url = notification.userInfo?[QuickLookPreferredHeightNotificationKey.url] as? URL,
+              let size = notification.userInfo?[QuickLookPreferredHeightNotificationKey.size] as? CGSize
+        else { return }
+
+        let roundedSize = CGSize(width: ceil(size.width), height: ceil(size.height))
+        if let currentSize = measuredPreviewSizes[url],
+           abs(currentSize.width - roundedSize.width) < 2,
+           abs(currentSize.height - roundedSize.height) < 2 {
+            return
+        }
+
+        measuredPreviewSizes[url] = roundedSize
+
+        for item in state.projections where item.isVisible && item.fileURL == url {
+            windows[item.id]?.setFrame(frame(for: item), display: true, animate: false)
+        }
     }
 }
 
@@ -90,19 +121,23 @@ private enum DocumentPreviewSizing {
         "xlsx"
     ]
 
-    static func frameForPreviewing(url: URL, in rect: CGRect) -> CGRect {
+    static func frameForPreviewing(url: URL, in rect: CGRect, measuredSize: CGSize?) -> CGRect {
         guard spreadsheetExtensions.contains(url.pathExtension.lowercased()),
               ProjectionDocumentView.usesSpreadsheetQuickLookLayout(for: url)
         else {
             return rect
         }
 
-        let aspectRatio = (try? XLSXHTMLRenderer.aspectRatio(url: url)) ?? 3.2
-        let fittedHeight = min(rect.height, ceil(rect.width / aspectRatio) + 18)
+        guard let measuredSize else {
+            return rect
+        }
+
+        let fittedWidth = min(rect.width, max(120, measuredSize.width))
+        let fittedHeight = min(rect.height, max(80, measuredSize.height))
         return CGRect(
             x: rect.minX,
             y: rect.maxY - fittedHeight,
-            width: rect.width,
+            width: fittedWidth,
             height: fittedHeight
         )
     }
