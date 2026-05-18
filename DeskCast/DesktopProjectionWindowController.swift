@@ -87,6 +87,7 @@ final class DesktopProjectionWindowController {
         return DocumentPreviewSizing.frameForPreviewing(
             url: item.fileURL,
             in: rect,
+            on: screen.frame,
             measuredSize: measuredPreviewSizes[item.fileURL]
         )
     }
@@ -121,7 +122,7 @@ private enum DocumentPreviewSizing {
         "xlsx"
     ]
 
-    static func frameForPreviewing(url: URL, in rect: CGRect, measuredSize: CGSize?) -> CGRect {
+    static func frameForPreviewing(url: URL, in rect: CGRect, on screen: CGRect, measuredSize: CGSize?) -> CGRect {
         guard spreadsheetExtensions.contains(url.pathExtension.lowercased()),
               ProjectionDocumentView.usesSpreadsheetQuickLookLayout(for: url)
         else {
@@ -132,11 +133,17 @@ private enum DocumentPreviewSizing {
             return rect
         }
 
-        let fittedWidth = min(rect.width, max(120, measuredSize.width))
-        let fittedHeight = min(rect.height, max(80, measuredSize.height))
+        let naturalWidth = max(120, measuredSize.width)
+        let naturalHeight = max(80, measuredSize.height)
+        let fitScale = min(1, screen.width / naturalWidth, screen.height / naturalHeight)
+        let fittedWidth = min(screen.width, naturalWidth * fitScale)
+        let fittedHeight = min(screen.height, naturalHeight * fitScale)
+        let x = min(max(rect.minX, screen.minX), screen.maxX - fittedWidth)
+        let y = min(max(rect.maxY - fittedHeight, screen.minY), screen.maxY - fittedHeight)
+
         return CGRect(
-            x: rect.minX,
-            y: rect.maxY - fittedHeight,
+            x: x,
+            y: y,
             width: fittedWidth,
             height: fittedHeight
         )

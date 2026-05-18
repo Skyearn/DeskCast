@@ -101,6 +101,7 @@ private final class FittingQuickLookPreviewView: NSView {
     private let url: URL
     private var quickLookView: QLPreviewView?
     private var reportedSize: CGSize?
+    private var measuredContentSize: CGSize?
     private var measurementWorkItems: [DispatchWorkItem] = []
     private var renderWidth: CGFloat = 0
 
@@ -148,9 +149,26 @@ private final class FittingQuickLookPreviewView: NSView {
 
     private func updateQuickLookFrame() {
         guard let quickLookView else { return }
-        renderWidth = max(renderWidth, bounds.width)
+        renderWidth = max(renderWidth, bounds.width, measuredContentSize?.width ?? 0, Self.minimumMeasurementWidth)
         guard renderWidth > 0, bounds.height > 0 else { return }
-        quickLookView.frame = CGRect(x: 0, y: 0, width: renderWidth, height: bounds.height)
+
+        let naturalSize = measuredContentSize ?? CGSize(width: renderWidth, height: bounds.height)
+        let scale = min(
+            1,
+            bounds.width / max(naturalSize.width, 1),
+            bounds.height / max(naturalSize.height, 1)
+        )
+        let contentWidth = max(renderWidth, naturalSize.width)
+        let contentHeight = max(naturalSize.height, bounds.height / max(scale, 0.01))
+
+        quickLookView.wantsLayer = true
+        quickLookView.layer?.anchorPoint = CGPoint(x: 0, y: 0)
+        quickLookView.layer?.setAffineTransform(CGAffineTransform(scaleX: scale, y: scale))
+        quickLookView.frame = CGRect(x: 0, y: 0, width: contentWidth, height: contentHeight)
+    }
+
+    private static var minimumMeasurementWidth: CGFloat {
+        max(1_000, NSScreen.screens.map(\.frame.width).max() ?? 0)
     }
 
     private func scheduleMeasurements() {
@@ -172,6 +190,9 @@ private final class FittingQuickLookPreviewView: NSView {
         else { return }
 
         let roundedSize = CGSize(width: ceil(size.width), height: ceil(size.height))
+        measuredContentSize = roundedSize
+        updateQuickLookFrame()
+
         if let reportedSize,
            abs(reportedSize.width - roundedSize.width) < 2,
            abs(reportedSize.height - roundedSize.height) < 2 {
