@@ -152,19 +152,21 @@ private final class FittingQuickLookPreviewView: NSView {
         renderWidth = max(renderWidth, bounds.width, measuredContentSize?.width ?? 0, Self.minimumMeasurementWidth)
         guard renderWidth > 0, bounds.height > 0 else { return }
 
-        let naturalSize = measuredContentSize ?? CGSize(width: renderWidth, height: bounds.height)
+        let naturalHeight = measuredContentSize?.height ?? bounds.height
+        let naturalWidth = measuredContentSize?.width ?? renderWidth
         let scale = min(
             1,
-            bounds.width / max(naturalSize.width, 1),
-            bounds.height / max(naturalSize.height, 1)
+            bounds.width / max(naturalWidth, 1),
+            bounds.height / max(naturalHeight, 1)
         )
-        let contentWidth = max(renderWidth, naturalSize.width)
-        let contentHeight = max(naturalSize.height, bounds.height / max(scale, 0.01))
+
+        let frameWidth = max(naturalWidth, bounds.width / max(scale, 0.01))
+        let frameHeight = max(naturalHeight, bounds.height / max(scale, 0.01))
 
         quickLookView.wantsLayer = true
         quickLookView.layer?.anchorPoint = CGPoint(x: 0, y: 0)
         quickLookView.layer?.setAffineTransform(CGAffineTransform(scaleX: scale, y: scale))
-        quickLookView.frame = CGRect(x: 0, y: 0, width: contentWidth, height: contentHeight)
+        quickLookView.frame = CGRect(x: 0, y: 0, width: frameWidth, height: frameHeight)
     }
 
     private static var minimumMeasurementWidth: CGFloat {
